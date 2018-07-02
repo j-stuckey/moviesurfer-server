@@ -86,20 +86,6 @@ app.get('/api/movies', (req, res, next) => {
             Type: 'movie',
             Poster:
                 'https://images-na.ssl-images-amazon.com/images/M/MV5BODIwNDQ3MTYtMWZiYS00MDYyLWI4ZGEtZjBkODU4NTgyNDFkXkEyXkFqcGdeQXVyMjM3ODA2NDQ@._V1_SX300.jpg'
-        },
-        {
-            Title: "Making 'The Matrix'",
-            Year: '1999',
-            imdbID: 'tt0365467',
-            Type: 'movie',
-            Poster: 'N/A'
-        },
-        {
-            Title: 'Sex Files: Sexual Matrix',
-            Year: '2000',
-            imdbID: 'tt0224086',
-            Type: 'movie',
-            Poster: 'N/A'
         }
     ];
 
