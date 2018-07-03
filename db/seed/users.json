@@ -1,0 +1,23 @@
+[
+    {
+      "_id": "333333333333333333333300",
+      "firstName": "Bob",
+      "lastName":"User",
+      "username": "bobuser",
+      "password": "$2a$10$5jWBoZEy7P.Ou69F4Egz4eYLmTBovYhq1322ckxB6eFPI0wyEj1gi"
+    },
+    {
+        "_id": "333333333333333333333304",
+        "firstName": "Mary",
+        "lastName":"User",
+        "username": "maryuser",
+        "password": "$2a$10$5jWBoZEy7P.Ou69F4Egz4eYLmTBovYhq1322ckxB6eFPI0wyEj1gi"
+    },    
+    {
+        "_id": "333333333333333333333306",
+        "firstName": "Pat",
+        "lastName":"User",
+        "username": "patuser",
+        "password": "$2a$10$5jWBoZEy7P.Ou69F4Egz4eYLmTBovYhq1322ckxB6eFPI0wyEj1gi"
+    }
+]

@@ -4,9 +4,8 @@ const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
 const fetch = require('isomorphic-fetch');
-const axios = require('axios');
 
-const { PORT, CLIENT_ORIGIN } = require('./config');
+const { PORT, CLIENT_ORIGIN, API_KEY } = require('./config');
 const { dbConnect } = require('./db-mongoose');
 // const {dbConnect} = require('./db-knex');
 
@@ -27,7 +26,7 @@ app.use(
 app.get('/api/movies', (req, res, next) => {
     const searchTerm = req.query.title;
     if (searchTerm) {
-        fetch(`http://www.omdbapi.com/?apikey=91753d6d&s=${searchTerm}`)
+        fetch(`http://www.omdbapi.com/?apikey=${API_KEY}&s=${searchTerm}`)
             .then(apiResponse => {
                 if (!apiResponse.ok) {
                     return Promise.reject(apiResponse.statusText);
@@ -35,7 +34,8 @@ app.get('/api/movies', (req, res, next) => {
                 return apiResponse;
             })
             .then(apiResponse => apiResponse.json())
-            .then(data => res.json(data));
+            .then(data => res.json(data))
+            .catch(err => next(err));
     }
     // res.json('No search results found');
 });
