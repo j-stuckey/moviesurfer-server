@@ -5,6 +5,8 @@ const cors = require('cors');
 const morgan = require('morgan');
 const fetch = require('isomorphic-fetch');
 
+const usersRouter = require('./routes/users');
+
 const { PORT, CLIENT_ORIGIN, API_KEY } = require('./config');
 const { dbConnect } = require('./db-mongoose');
 // const {dbConnect} = require('./db-knex');
@@ -23,6 +25,12 @@ app.use(
     })
 );
 
+// Parsing request body
+app.use(express.json());
+
+// Mount routers here
+app.use('/api/users', usersRouter);
+
 app.get('/api/movies', (req, res, next) => {
     const searchTerm = req.query.title;
     if (searchTerm) {
@@ -38,6 +46,24 @@ app.get('/api/movies', (req, res, next) => {
             .catch(err => next(err));
     }
     // res.json('No search results found');
+});
+
+// Custom 404 Not Found route handler
+app.use((req, res, next) => {
+    const err = new Error('Not Found');
+    err.status = 404;
+    next(err);
+});
+
+// Custom Error Handler
+app.use((err, req, res, next) => {
+    if (err.status) {
+        const errBody = Object.assign({}, err, { message: err.message });
+        res.status(err.status).json(errBody);
+    } else {
+        console.log(err);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
 });
 
 function runServer(port = PORT) {
