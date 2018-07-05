@@ -6,6 +6,7 @@ const userSchema = new mongoose.Schema({
     firstName: { type: String },
     LastName: { type: String },
     username: { type: String, required: true, unique: true },
+    email: { type: String, required: true, unique: true },
     password: { type: String, required: true }
 });
 
@@ -17,5 +18,13 @@ userSchema.set('toObject', {
         delete ret.password;
     }
 });
+
+userSchema.methods.validatePassword = function(password) {
+    return bcrypt.compare(password, this.password);
+};
+
+userSchema.statics.hashPassword = function(password) {
+    return bcrypt.hash(password, 10);
+};
 
 module.exports = mongoose.model('User', userSchema);

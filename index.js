@@ -5,7 +5,12 @@ const cors = require('cors');
 const morgan = require('morgan');
 const fetch = require('isomorphic-fetch');
 
+const passport = require('passport');
+const localStrategy = require('./passport/local');
+const jwtStrategy = require('./passport/jwt');
+
 const usersRouter = require('./routes/users');
+const authRouter = require('./routes/auth');
 
 const { PORT, CLIENT_ORIGIN, API_KEY } = require('./config');
 const { dbConnect } = require('./db-mongoose');
@@ -28,8 +33,13 @@ app.use(
 // Parsing request body
 app.use(express.json());
 
+// Configures pasport to use the Strategies
+passport.use(localStrategy);
+passport.use(jwtStrategy);
+
 // Mount routers here
 app.use('/api/users', usersRouter);
+app.use('/api/login', authRouter);
 
 app.get('/api/movies', (req, res, next) => {
     const searchTerm = req.query.title;

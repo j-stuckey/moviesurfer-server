@@ -17,6 +17,7 @@ router.post('/', (req, res, next) => {
                 firstName,
                 lastName,
                 username,
+                email,
                 password: digest
             };
             return User.create(newUser);
