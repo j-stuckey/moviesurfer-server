@@ -16,7 +16,7 @@ router.post('/', (req, res, next) => {
             const newUser = {
                 firstName,
                 lastName,
-                username,
+                username: username.toLowerCase(),
                 email,
                 password: digest
             };

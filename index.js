@@ -11,6 +11,8 @@ const jwtStrategy = require('./passport/jwt');
 
 const usersRouter = require('./routes/users');
 const authRouter = require('./routes/auth');
+const moviesRouter = require('./routes/movies');
+const listsRouter = require('./routes/lists');
 
 const { PORT, CLIENT_ORIGIN, API_KEY } = require('./config');
 const { dbConnect } = require('./db-mongoose');
@@ -38,22 +40,22 @@ passport.use(localStrategy);
 passport.use(jwtStrategy);
 
 // Mount routers here
+app.use('/api/movies', moviesRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/login', authRouter);
+app.use('/api/lists', listsRouter);
 
-app.get('/api/movies', (req, res, next) => {
+app.get('/api/search', (req, res, next) => {
     const searchTerm = req.query.title;
     if (searchTerm) {
-        fetch(`http://www.omdbapi.com/?apikey=${API_KEY}&s=${searchTerm}`)
-            .then(apiResponse => {
-                if (!apiResponse.ok) {
-                    return Promise.reject(apiResponse.statusText);
-                }
-                return apiResponse;
-            })
+        return fetch(`http://www.omdbapi.com/?apikey=${API_KEY}&s=${searchTerm}`)
             .then(apiResponse => apiResponse.json())
-            .then(data => res.json(data))
-            .catch(err => next(err));
+            .then(data => {
+                if (data.Response === 'True') {
+                    return res.json(data);
+                }
+                next(data.Error);
+            });
     }
     // res.json('No search results found');
 });
@@ -71,7 +73,7 @@ app.use((err, req, res, next) => {
         const errBody = Object.assign({}, err, { message: err.message });
         res.status(err.status).json(errBody);
     } else {
-        console.log(err);
+        console.error(err);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 });
