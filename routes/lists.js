@@ -30,7 +30,10 @@ router.post('/', (req, res, next) => {
 
     // movieId might not need to go here, figure it out.
 
-    const newList = { title, userId };
+    const newList = {
+        title: title.toLowerCase(),
+        userId
+    };
     if (!title) {
         const err = new Error('Missing `title` in request body');
         err.status = 400;
@@ -46,4 +49,18 @@ router.post('/', (req, res, next) => {
         .catch(err => next(err));
 });
 
+router.put('/', (req, res, next) => {
+    const { movieId, listId } = req.body;
+    const userId = req.user.id;
+
+    const updateList = { movieId, userId };
+
+    List.findById({ _id: listId })
+        .then(list => {
+            list.movies.push(movieId);
+            return list.save();
+        })
+        .then(() => res.status(204).send())
+        .catch(err => next(err));
+});
 module.exports = router;
