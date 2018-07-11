@@ -17,7 +17,6 @@ router.get('/', (req, res, next) => {
     List.find({ userId })
         .populate('movies')
         .then(results => {
-            console.log(results);
             res.json(results);
         })
         .catch(err => {
@@ -27,6 +26,18 @@ router.get('/', (req, res, next) => {
 
 router.get('/:id', (req, res, next) => {
     const { id } = req.params;
+    const userId = req.user.id;
+
+    console.log(id);
+    List.findOne({ _id: id })
+        .populate('movies')
+        .then(results => {
+            console.log(results);
+            res.json(results);
+        })
+        .catch(err => {
+            next(err);
+        });
 });
 
 router.post('/', (req, res, next) => {
