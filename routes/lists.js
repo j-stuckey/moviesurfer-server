@@ -13,16 +13,20 @@ router.use('/', passport.authenticate('jwt', { session: false, failWithError: tr
 
 router.get('/', (req, res, next) => {
     const userId = req.user.id;
-    console.log(userId);
 
     List.find({ userId })
-        // .populate('movieId')
+        .populate('movies')
         .then(results => {
+            console.log(results);
             res.json(results);
         })
         .catch(err => {
             next(err);
         });
+});
+
+router.get('/:id', (req, res, next) => {
+    const { id } = req.params;
 });
 
 router.post('/', (req, res, next) => {
@@ -65,14 +69,10 @@ router.put('/', (req, res, next) => {
         .then(list => {
             newList = list;
             return Movie.create(newMovie);
-            // list.movies.push(movieId);
-            // return list.save();
         })
         .then(movie => {
             console.log(movie);
-            console.log('hello world');
             newList.movies.push(movie);
-            console.log(newList);
             return newList.save();
         })
         .then(() => res.status(204).send())

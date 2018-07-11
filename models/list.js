@@ -17,6 +17,7 @@ listSchema.set('toObject', {
     virtuals: true,
     versionKey: false,
     transform: (doc, ret) => {
+        ret.id = doc._id;
         delete ret._id;
     }
 });
