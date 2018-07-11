@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const listSchema = new mongoose.Schema({
     title: { type: String, required: true },
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-    movies: [{ type: String }]
+    movies: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Movie', required: true }]
 });
 
 listSchema.index({ title: 1, userId: 1 }, { unique: true });

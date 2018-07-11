@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 
 const List = require('../models/list');
+const Movie = require('../models/movie');
 
 const router = express.Router();
 
@@ -50,15 +51,29 @@ router.post('/', (req, res, next) => {
 });
 
 router.put('/', (req, res, next) => {
-    const { movieId, listId } = req.body;
+    // const { movieId, listId } = req.body;
     const userId = req.user.id;
 
-    const updateList = { movieId, userId };
+    const { movieId, listId, year, title } = req.body;
+    const newMovie = { movieId, listId, year, title, userId };
 
+    // const updateList = { movieId, userId };
+
+    let newList;
     List.findById({ _id: listId })
+        .populate('movies')
         .then(list => {
-            list.movies.push(movieId);
-            return list.save();
+            newList = list;
+            return Movie.create(newMovie);
+            // list.movies.push(movieId);
+            // return list.save();
+        })
+        .then(movie => {
+            console.log(movie);
+            console.log('hello world');
+            newList.movies.push(movie);
+            console.log(newList);
+            return newList.save();
         })
         .then(() => res.status(204).send())
         .catch(err => next(err));
