@@ -69,8 +69,8 @@ router.put('/', (req, res, next) => {
     // const { movieId, listId } = req.body;
     const userId = req.user.id;
 
-    const { movieId, listId, year, title } = req.body;
-    const newMovie = { movieId, listId, year, title, userId };
+    const { movieId, listId, year, title, poster } = req.body;
+    const newMovie = { movieId, listId, year, title, userId, poster };
 
     // const updateList = { movieId, userId };
 

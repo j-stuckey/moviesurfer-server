@@ -7,7 +7,8 @@ const movieSchema = new mongoose.Schema({
     title: { type: String },
     year: { type: String },
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-    listId: { type: mongoose.Schema.Types.ObjectId, ref: 'List', required: true }
+    listId: { type: mongoose.Schema.Types.ObjectId, ref: 'List', required: true },
+    poster: { type: String }
 });
 
 movieSchema.index({ movieId: 1, userId: 1 }, { unique: true });
