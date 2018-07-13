@@ -28,11 +28,9 @@ router.get('/:id', (req, res, next) => {
     const { id } = req.params;
     const userId = req.user.id;
 
-    console.log(id);
     List.findOne({ _id: id })
         .populate('movies')
         .then(results => {
-            console.log(results);
             res.json(results);
         })
         .catch(err => {
@@ -82,7 +80,6 @@ router.put('/', (req, res, next) => {
             return Movie.create(newMovie);
         })
         .then(movie => {
-            console.log(movie);
             newList.movies.push(movie);
             return newList.save();
         })

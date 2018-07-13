@@ -22,11 +22,9 @@ router.get('/', (req, res, next) => {
 router.post('/', (req, res, next) => {
     const { movieId, userId, listId } = req.body;
     const newMovie = { movieId, userId, listId };
-    console.log(newMovie);
 
     Movie.create(newMovie)
         .then(result => {
-            console.log(result);
             res.location(`${req.originalUrl}/${result.id}`)
                 .status(201)
                 .json(result);

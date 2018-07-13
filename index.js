@@ -42,7 +42,7 @@ passport.use(jwtStrategy);
 // Mount routers here
 app.use('/api/movies', moviesRouter);
 app.use('/api/users', usersRouter);
-app.use('/api/login', authRouter);
+app.use('/api/auth', authRouter);
 app.use('/api/lists', listsRouter);
 
 app.get('/api/search', (req, res, next) => {
