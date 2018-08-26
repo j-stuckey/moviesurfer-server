@@ -11,7 +11,7 @@ const movieSchema = new mongoose.Schema({
     poster: { type: String }
 });
 
-movieSchema.index({ movieId: 1, userId: 1 }, { unique: true });
+// movieSchema.index({ movieId: 1, userId: 1 }, { unique: true });
 
 movieSchema.set('timestamps', true);
 

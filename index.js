@@ -16,7 +16,6 @@ const listsRouter = require('./routes/lists');
 
 const { PORT, CLIENT_ORIGIN, API_KEY } = require('./config');
 const { dbConnect } = require('./db-mongoose');
-// const {dbConnect} = require('./db-knex');
 
 const app = express();
 
