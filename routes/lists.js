@@ -42,14 +42,12 @@ router.post('/', (req, res, next) => {
     const { title } = req.body;
     const userId = req.user.id;
 
-    // movieId might not need to go here, figure it out.
-
     const newList = {
         title: title.toLowerCase(),
         userId
     };
     if (!title) {
-        const err = new Error('Missing `title` in request body');
+        const err = new Error('No empty list titles!');
         err.status = 400;
         return next(err);
     }
@@ -60,7 +58,10 @@ router.post('/', (req, res, next) => {
                 .status(201)
                 .json(result);
         })
-        .catch(err => next(err));
+        .catch(err => {
+            console.log(err);
+            next(err);
+        });
 });
 
 router.put('/', (req, res, next) => {
