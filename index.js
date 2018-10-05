@@ -56,6 +56,7 @@ app.get('/api/search', (req, res, next) => {
                 next(data.Error);
             });
     }
+
     // res.json('No search results found');
 });
 
@@ -75,8 +76,14 @@ app.use((err, req, res, next) => {
         res.status(400).json({ message: 'That list name already exists'});
     }
     else {
-        console.error(err);
-        res.status(500).json({ message: 'Internal Server Error' });
+        if (err === 'Movie not found!') {
+            console.log(err);
+            res.status(500).json({ message: err});
+        }
+        else {
+            console.error(err);
+            res.status(500).json({ message: 'Internal Server Error' });
+        }
     }
 });
 

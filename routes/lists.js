@@ -17,7 +17,8 @@ router.get('/', (req, res, next) => {
     List.find({ userId })
         .populate('movies')
         .then(results => {
-            res.json(results);
+            console.log(results);
+            return res.json(results);
         })
         .catch(err => {
             next(err);
@@ -28,6 +29,7 @@ router.get('/:id', (req, res, next) => {
     const { id } = req.params;
     const userId = req.user.id;
 
+    
     List.findOne({ _id: id })
         .populate('movies')
         .then(results => {
@@ -47,13 +49,14 @@ router.post('/', (req, res, next) => {
         userId
     };
     if (!title) {
-        const err = new Error('No empty list titles!');
+        const err = new Error('List name cannot be blank');
         err.status = 400;
         return next(err);
     }
 
     List.create(newList)
         .then(result => {
+            console.log(result);
             res.location(`${req.originalUrl}/${result.id}`)
                 .status(201)
                 .json(result);
@@ -65,13 +68,11 @@ router.post('/', (req, res, next) => {
 });
 
 router.put('/', (req, res, next) => {
-    // const { movieId, listId } = req.body;
+
     const userId = req.user.id;
 
     const { movieId, listId, year, title, poster } = req.body;
     const newMovie = { movieId, listId, year, title, userId, poster };
-
-    // const updateList = { movieId, userId };
 
     let newList;
     List.findById({ _id: listId })
@@ -84,7 +85,34 @@ router.put('/', (req, res, next) => {
             newList.movies.push(movie);
             return newList.save();
         })
-        .then(() => res.status(204).send())
+        .then(result => {
+            console.log(result);
+            res.location(`${req.originalUrl}/${result.id}`)
+                .status(201)
+                .json(result);
+        })
         .catch(err => next(err));
 });
+
+router.delete('/:id', (req, res, next) => {
+
+    const { id } = req.params;
+
+    const userId = req.user.id;
+
+
+    // List.findByIdAndRemove({ _id: listId });
+    List.findOneAndRemove({ _id: id })
+        .then(result => {
+            console.log(result);
+            res.location(`${req.originalUrl}/${result.id}`)
+                .status(201)
+                .json(result);
+        })
+        .catch(err => {
+            console.log(err);
+            next(err);
+        });
+});
+
 module.exports = router;
