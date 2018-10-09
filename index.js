@@ -44,6 +44,17 @@ app.use('/api/users', usersRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/lists', listsRouter);
 
+app.use('/api/info', (req, res, next) => {
+    const imdbId = req.query.imdbId;
+
+    return fetch(`http://www.omdbapi.com/?apikey=${API_KEY}&i=${imdbId}`)
+        .then(apiResponse => apiResponse.json())
+        .then(data => {
+            return res.json(data);
+        })
+        .catch(err => next(err));
+});
+
 app.get('/api/search', (req, res, next) => {
     const searchTerm = req.query.title;
     if (searchTerm) {
