@@ -58,7 +58,9 @@ app.use('/api/info', (req, res, next) => {
 app.get('/api/search', (req, res, next) => {
     const searchTerm = req.query.title;
     if (searchTerm) {
-        return fetch(`http://www.omdbapi.com/?apikey=${API_KEY}&s=${searchTerm}`)
+        return fetch(
+            `http://www.omdbapi.com/?apikey=${API_KEY}&s=${searchTerm}`
+        )
             .then(apiResponse => apiResponse.json())
             .then(data => {
                 if (data.Response === 'True') {
@@ -83,15 +85,14 @@ app.use((err, req, res, next) => {
     if (err.status) {
         const errBody = Object.assign({}, err, { message: err.message });
         res.status(err.status).json(errBody);
-    } if (err.code === 11000) {
-        res.status(400).json({ message: 'That list name already exists'});
     }
-    else {
+    if (err.code === 11000) {
+        res.status(400).json({ message: 'That list name already exists' });
+    } else {
         if (err === 'Movie not found!') {
             console.log(err);
-            res.status(500).json({ message: err});
-        }
-        else {
+            res.status(500).json({ message: err });
+        } else {
             console.error(err);
             res.status(500).json({ message: 'Internal Server Error' });
         }
