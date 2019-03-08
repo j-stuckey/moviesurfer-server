@@ -1,11 +1,11 @@
 version: '3'
 services:
-    front-end:
+    server:
         build: .
         image: moviesurfer_server:latest
         command: npm start
         ports:
-          - '8000:3000'
+          - '8080:8080'
         volumes:
           - '.:/usr/src/app'
           - /usr/src/app/node_modules

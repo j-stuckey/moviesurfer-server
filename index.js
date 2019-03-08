@@ -25,7 +25,11 @@ app.use(
     })
 );
 
-app.use(cors());
+app.use(
+    cors({
+        origin: CLIENT_ORIGIN
+    })
+);
 
 // Parsing request body
 app.use(express.json());
