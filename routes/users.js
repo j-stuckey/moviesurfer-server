@@ -9,15 +9,12 @@ const User = require('../models/user');
 const router = express.Router();
 
 router.post('/', (req, res, next) => {
-    let { username, password, firstName, lastName, email } = req.body;
+    let { username, password } = req.body;
 
     return User.hashPassword(password)
         .then(digest => {
             const newUser = {
-                firstName,
-                lastName,
                 username: username.toLowerCase(),
-                email,
                 password: digest
             };
             return User.create(newUser);
