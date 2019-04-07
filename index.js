@@ -69,8 +69,12 @@ app.get('/api/search', (req, res, next) => {
                         totalResults: data.totalResults
                     };
                     return res.json(response);
+                } else {
+                    res.json({
+                        searchResults: 0,
+                        totalResults: 0
+                    });
                 }
-                next(data.Error);
             });
     }
 
@@ -90,12 +94,15 @@ app.use((err, req, res, next) => {
         const errBody = Object.assign({}, err, { message: err.message });
         res.status(err.status).json(errBody);
     }
+    if (err.message) {
+        res.json({ err: err.message });
+    }
     if (err.code === 11000) {
         res.status(400).json({ message: 'That list name already exists' });
     } else {
         if (err === 'Movie not found!') {
-            console.log(err);
-            res.status(500).json({ message: err });
+            // console.log(err);
+            res.json({ err: true, message: err });
         } else {
             console.error(err);
             res.status(500).json({ message: 'Internal Server Error' });
