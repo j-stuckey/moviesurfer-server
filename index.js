@@ -71,7 +71,7 @@ app.get('/api/search', (req, res, next) => {
                     return res.json(response);
                 } else {
                     res.json({
-                        searchResults: 0,
+                        searchResults: [],
                         totalResults: 0
                     });
                 }
