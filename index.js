@@ -64,7 +64,11 @@ app.get('/api/search', (req, res, next) => {
             .then(apiResponse => apiResponse.json())
             .then(data => {
                 if (data.Response === 'True') {
-                    return res.json(data);
+                    const response = {
+                        searchResults: data.Search,
+                        totalResults: data.totalResults
+                    };
+                    return res.json(response);
                 }
                 next(data.Error);
             });
