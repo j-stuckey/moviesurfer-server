@@ -69,6 +69,12 @@ app.get('/api/search', (req, res, next) => {
                         totalResults: data.totalResults
                     };
                     return res.json(response);
+                } else if (data.Error === 'Too many results.') {
+                    res.json({
+                        message: data.Error,
+                        searchResults: [],
+                        totalResults: 0
+                    });
                 } else {
                     res.json({
                         searchResults: [],
@@ -90,6 +96,7 @@ app.use((req, res, next) => {
 
 // Custom Error Handler
 app.use((err, req, res, next) => {
+    console.log(err);
     if (err.status) {
         const errBody = Object.assign({}, err, { message: err.message });
         res.status(err.status).json(errBody);
