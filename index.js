@@ -66,7 +66,8 @@ app.get('/api/search', (req, res, next) => {
                 if (data.Response === 'True') {
                     const response = {
                         searchResults: data.Search,
-                        totalResults: data.totalResults
+                        totalResults: data.totalResults,
+                        pageCount: Math.ceil(data.totalResults / 10)
                     };
                     return res.json(response);
                 } else if (data.Error === 'Too many results.') {
