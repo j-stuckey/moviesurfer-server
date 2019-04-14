@@ -56,10 +56,11 @@ app.use('/api/info', (req, res, next) => {
 });
 
 app.get('/api/search', (req, res, next) => {
-    const searchTerm = req.query.title;
+    const { searchTerm, pageNumber } = req.query;
+	
     if (searchTerm) {
         return fetch(
-            `http://www.omdbapi.com/?apikey=${API_KEY}&s=${searchTerm}`
+            `http://www.omdbapi.com/?apikey=${API_KEY}&s=${searchTerm}&page=${pageNumber}`
         )
             .then(apiResponse => apiResponse.json())
             .then(data => {
