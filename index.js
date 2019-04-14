@@ -56,17 +56,33 @@ app.use('/api/info', (req, res, next) => {
 });
 
 app.get('/api/search', (req, res, next) => {
-    const searchTerm = req.query.title;
+    const { searchTerm, pageNumber } = req.query;
+	
     if (searchTerm) {
         return fetch(
-            `http://www.omdbapi.com/?apikey=${API_KEY}&s=${searchTerm}`
+            `http://www.omdbapi.com/?apikey=${API_KEY}&s=${searchTerm}&page=${pageNumber}`
         )
             .then(apiResponse => apiResponse.json())
             .then(data => {
                 if (data.Response === 'True') {
-                    return res.json(data);
+                    const response = {
+                        searchResults: data.Search,
+                        totalResults: data.totalResults,
+                        pageCount: Math.ceil(data.totalResults / 10)
+                    };
+                    return res.json(response);
+                } else if (data.Error === 'Too many results.') {
+                    res.json({
+                        message: data.Error,
+                        searchResults: [],
+                        totalResults: 0
+                    });
+                } else {
+                    res.json({
+                        searchResults: [],
+                        totalResults: 0
+                    });
                 }
-                next(data.Error);
             });
     }
 
@@ -82,16 +98,20 @@ app.use((req, res, next) => {
 
 // Custom Error Handler
 app.use((err, req, res, next) => {
+    console.log(err);
     if (err.status) {
         const errBody = Object.assign({}, err, { message: err.message });
         res.status(err.status).json(errBody);
+    }
+    if (err.message) {
+        res.json({ err: err.message });
     }
     if (err.code === 11000) {
         res.status(400).json({ message: 'That list name already exists' });
     } else {
         if (err === 'Movie not found!') {
-            console.log(err);
-            res.status(500).json({ message: err });
+            // console.log(err);
+            res.json({ err: true, message: err });
         } else {
             console.error(err);
             res.status(500).json({ message: 'Internal Server Error' });
